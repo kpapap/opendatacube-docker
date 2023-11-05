@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Echo lines and fail fast
+# Echo lines and exit
 set -ex
 
 docker-compose up -d
