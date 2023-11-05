@@ -1,4 +1,4 @@
-.PHONY: test test-bootstrapping test-indexing up down
+.PHONY: test test-bootstrapping test-indexing up down kpapap
 
 test: test-bootstrapping test-indexing
 
@@ -16,3 +16,6 @@ up:
 
 down:
 	docker-compose down
+
+kpapap:
+	./kpapap.sh
