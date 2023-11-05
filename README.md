@@ -7,6 +7,16 @@ Docker Images related to the Open Data Cube project
 - [opendatacube/datacube-index](index/readme.md): A suite of tools to manage indexing into an Open Data Cube database
 - [https://github.com/kpapap/datacube-docker/tree/mymain/explorer](explorer): Files where I based the docker image for explorer
 
+## First time install
+
+Launch an AWS (t2.large) 50GB instance.
+
+Install docker, docker-compose, make, give your user permission to run docker without sudo.
+
+Run sudo make kpapap
+
+The instance will run a script and index 'sentinel-2-l2a' datasets from 'https://earth-search.aws.element84.com/v1/', bbox '20,39,25,41', from 2023-01-01 to 2023-11-01, limit 500.
+
 ## Original contents below
 
 ## How this works
