@@ -7,7 +7,7 @@ Docker Images related to the Open Data Cube project
 ## List of images
 
 * [opendatacube/datacube-index](index/readme.md): A suite of tools to manage indexing into an Open Data Cube database
-* [opendatacube/datacube-index](explorer): Files wher I based the ne docker image for explorer
+* [https://github.com/kpapap/datacube-docker/tree/mymain/explorer](explorer): Files wher I based the ne docker image for explorer
 
 ## Original contents below
 
