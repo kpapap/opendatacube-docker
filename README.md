@@ -1,8 +1,18 @@
 # datacube-docker
 
-General purpose Docker Images related to the Open Data Cube project
+Docker Images related to the Open Data Cube project
+
+## 
+
+## List of images
+
+* [opendatacube/datacube-index](index/readme.md): A suite of tools to manage indexing into an Open Data Cube database
+* [opendatacube/datacube-index](explorer): Files wher I based the ne docker image for explorer
+
+## Original contents below
 
 ## How this works
+
 
 Each folder has a Dockerfile and a version.txt, as a minimum. There are two GitHub Actions
 pipelines per image, one to test and one to build. In order to rebuild an image and have
