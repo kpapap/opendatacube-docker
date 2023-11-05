@@ -1,9 +1,9 @@
-version: '3.7'
+version: "3.7"
 
 services:
   # Start docker container for PostgreSQL to mock RDS
   postgres:
-    image: postgres:12.6-alpine
+    image: postgis/postgis:12-3.4-alpine
     ports:
       - "5434:5432"
     environment:
@@ -31,5 +31,5 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-      
+
     command: tail -f /dev/null
