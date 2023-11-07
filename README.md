@@ -15,7 +15,7 @@ Install docker, docker-compose, make, give your user permission to run docker wi
 
 Run sudo make kpapap
 
-The instance will run a script and index 'sentinel-2-l2a' datasets from 'https://earth-search.aws.element84.com/v1/', bbox '20,39,25,41', from 2023-01-01 to 2023-11-01, limit 500.
+The instance will run a script and index 'sentinel-2-l2a' datasets from 'https://earth-search.aws.element84.com/v1/', bbox '20,39,25,41', from 2023-01-01 to 2023-11-01, limit 1000.
 
 ## Original contents below
 

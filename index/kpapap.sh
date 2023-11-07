@@ -13,7 +13,7 @@ echo "Checking STAC API indexing..."
 docker-compose exec -T index stac-to-dc \
     --bbox='20,39,25,41' \
     --catalog-href='https://earth-search.aws.element84.com/v1/' \
-    --limit=500 \
+    --limit=1000 \
     --collections='sentinel-2-l2a' \
     --datetime='2023-01-01/2023-11-01'
 echo "Checking Indexed Datasets Count..."
