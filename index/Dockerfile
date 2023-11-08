@@ -2,7 +2,11 @@ FROM ghcr.io/osgeo/gdal:ubuntu-small-3.7.2
 
 ENV DEBIAN_FRONTEND=noninteractive \
     LC_ALL=C.UTF-8 \
-    LANG=C.UTF-8
+    LANG=C.UTF-8 \
+    TINI_VERSION=v0.19.0
+
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+RUN chmod +x /tini
 
 RUN apt-get update \
     # Developer convenience
