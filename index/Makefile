@@ -22,3 +22,6 @@ shell: ## Start an interactive shell
 
 kpapap:
 	./kpapap.sh
+
+clean: ## Delete everything
+	docker-compose down --rmi all -v
