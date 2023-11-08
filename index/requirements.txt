@@ -3,6 +3,16 @@ datacube[performance,s3]
 aiobotocore[awscli,boto3]
 odc-apps-dc-tools
 odc-apps-cloud
+# added from requirements of odc driver ->
+wget
+folium
+rioxarray
+geopandas
+geocube
+h5netcdf
+gunicorn
+opencv-python
+# added from requirements of odc driver <-
 # See https://github.com/yaml/pyyaml/issues/724
 pyyaml<=5.3.1
 # Libraries to compile with the local gdal
