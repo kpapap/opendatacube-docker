@@ -37,7 +37,7 @@ COPY requirements_odc.txt constraints.txt version.txt /conf/
 RUN cat /conf/version.txt \
   && pip install --no-cache-dir --upgrade pip \
   && pip install --no-cache-dir \
-    -r /conf/requirements.txt \
+    -r /conf/requirements_odc.txt \
     -c /conf/constraints.txt
 
 RUN pip freeze
