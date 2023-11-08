@@ -32,7 +32,7 @@ RUN apt-get update \
     && apt-get autoremove \
     && rm -rf /var/lib/{apt,dpkg,cache,log}
 
-COPY requirements.txt constraints.txt version.txt /conf/
+COPY requirements_odc.txt constraints.txt version.txt /conf/
 
 RUN cat /conf/version.txt \
   && pip install --no-cache-dir --upgrade pip \
@@ -42,16 +42,16 @@ RUN cat /conf/version.txt \
 
 RUN pip freeze
 
-# Copy Datacube bootstrapping and other scripts
-ADD ./assets /code
-RUN wget -q https://github.com/opendatacube/datacube-dataset-config/archive/refs/heads/main.zip \
-    -O /tmp/datacube-dataset-config.zip \
-    && unzip -q /tmp/datacube-dataset-config.zip -d /tmp \
-    && cp -r /tmp/datacube-dataset-config-main/odc-product-delete /code/odc-product-delete \
-    && rm -r /tmp/datacube-dataset-config-main /tmp/datacube-dataset-config.zip
+# Copy gparser
+RUN git clone https://github.com/Open-EO/openeo-pg-parser-python.git
+RUN cd openeo-pg-parser-python && pip install .
 
-## Do some symlinking
-RUN ln -s /code/bootstrap-odc.sh /usr/local/bin/bootstrap-odc.sh
+RUN git clone https://github.com/SARScripts/openeo_odc_driver.git
 
-# Smoke test
-RUN s3-to-dc --help
+WORKDIR /
+
+ENTRYPOINT ["/tini", "--"]
+
+WORKDIR /openeo_odc_driver/openeo_odc_driver/
+
+CMD ["gunicorn","-c","gunicorn.conf.py","odc_backend:app"]

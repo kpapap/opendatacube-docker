@@ -1,0 +1,10 @@
+# added from requirements of odc driver ->
+wget
+folium
+rioxarray
+geopandas
+geocube
+h5netcdf
+gunicorn
+opencv-python
+# added from requirements of odc driver <-
