@@ -61,9 +61,9 @@ services:
       dockerfile: Dockerfile_odc
     environment:
       - DB_HOSTNAME=postgres
-      - DB_USERNAME=opendatacube
+      - DB_USERNAME=postgres
       - DB_PASSWORD=opendatacubepassword
-      - DB_DATABASE=opendatacube
+      - DB_DATABASE=postgres
       - AWS_NO_SIGN_REQUEST=true
     links:
       - postgres:postgres
