@@ -8,14 +8,17 @@ test-bootstrapping:
 test-indexing:
 	./test_indexing.sh
 
-make build:
+make build: ## Rebuild the base image
 	docker-compose build
 
-up:
+up: ## Bring up the Docker environment
 	docker-compose up
 
-down:
+down: ## Bring down the system
 	docker-compose down
+
+shell: ## Start an interactive shell
+	docker-compose exec openeo_odc_driver bash
 
 kpapap:
 	./kpapap.sh
