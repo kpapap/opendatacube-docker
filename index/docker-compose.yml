@@ -9,7 +9,7 @@ services:
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_PASSWORD=opendatacubepassword
-      - POSTGRES_USER=opendatacube
+      - POSTGRES_USER=postgres
     volumes:
       - ./data/pg:/var/lib/postgresql/data
     restart: always
