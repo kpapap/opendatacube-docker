@@ -15,25 +15,6 @@ services:
       timeout: 5s
       retries: 5
 
-  # Start docker container for Datacube-Index
-  index:
-    build: .
-    image: datacube-index
-    environment:
-      - DB_HOSTNAME=postgres
-      - DB_USERNAME=postgres
-      - DB_PASSWORD=opendatacubepassword
-      - DB_DATABASE=postgres
-      - DB_PORT=5432
-      - AWS_DEFAULT_REGION=us-west-2
-      - PRODUCT_CATALOG=https://raw.githubusercontent.com/GeoscienceAustralia/dea-config/a4f39b485b33608a016032d9987251881fec4b6f/workspaces/sandbox-products.csv
-      - METADATA_CATALOG=https://raw.githubusercontent.com/GeoscienceAustralia/dea-config/a4f39b485b33608a016032d9987251881fec4b6f/workspaces/sandbox-metadata.yaml
-    depends_on:
-      postgres:
-        condition: service_healthy
-
-    command: tail -f /dev/null
-
   # Start docker container for Explorer
   explorer:
     build:
@@ -50,17 +31,19 @@ services:
       - 9001:9000
     restart: always
 
-  # Start docker container for odc driver
-  openeo_odc_driver:
-    build:
-      context: .
-      dockerfile: Dockerfile_odc
+  # Start docker container for Datacube-Index
+  index:
+    build: .
+    image: datacube-index
     environment:
       - DB_HOSTNAME=postgres
       - DB_USERNAME=postgres
       - DB_PASSWORD=opendatacubepassword
       - DB_DATABASE=postgres
-      - AWS_NO_SIGN_REQUEST=true
+      - DB_PORT=5432
+      - AWS_DEFAULT_REGION=us-west-2
+      - PRODUCT_CATALOG=https://raw.githubusercontent.com/GeoscienceAustralia/dea-config/a4f39b485b33608a016032d9987251881fec4b6f/workspaces/sandbox-products.csv
+      - METADATA_CATALOG=https://raw.githubusercontent.com/GeoscienceAustralia/dea-config/a4f39b485b33608a016032d9987251881fec4b6f/workspaces/sandbox-metadata.yaml
     links:
       - postgres:postgres
       - explorer:explorer
@@ -69,3 +52,8 @@ services:
     volumes:
       - ~/tmp/:/tmp/
     restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    command: tail -f /dev/null

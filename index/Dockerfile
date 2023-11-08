@@ -51,3 +51,17 @@ RUN ln -s /code/bootstrap-odc.sh /usr/local/bin/bootstrap-odc.sh
 
 # Smoke test
 RUN s3-to-dc --help
+
+# Copy gparser
+RUN git clone https://github.com/Open-EO/openeo-pg-parser-python.git
+RUN cd openeo-pg-parser-python && pip install .
+
+RUN git clone https://github.com/SARScripts/openeo_odc_driver.git
+
+WORKDIR /
+
+ENTRYPOINT ["/tini", "--"]
+
+WORKDIR /openeo_odc_driver/openeo_odc_driver/
+
+CMD ["gunicorn","-c","gunicorn.conf.py","odc_backend:app"]
