@@ -15,7 +15,7 @@ docker-compose exec -T index stac-to-dc \
     --catalog-href='https://earth-search.aws.element84.com/v1/' \
     --limit=1000 \
     --collections='sentinel-2-l2a' \
-    --datetime='2023-01-01/2023-11-01'
+    --datetime='2023-01-01/2023-01-31'
 echo "Checking Indexed Datasets Count..."
 docker-compose exec -T postgres psql -U postgres -c "SELECT count(*) from agdc.dataset"
 echo "Initializing Explorer..."
