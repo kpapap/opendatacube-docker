@@ -11,7 +11,7 @@ docker-compose exec -T index wget https://eo4naturapublicbucket.s3.us-west-2.ama
 docker-compose exec -T index datacube product add s2_l2a.odc-product.yaml
 echo "Checking STAC API indexing..."
 docker-compose exec -T index stac-to-dc \
-    --bbox='20,39,25,41' \
+    --bbox='23.70,40.49,25.00,41.33' \
     --catalog-href='https://earth-search.aws.element84.com/v1/' \
     --limit=1000 \
     --collections='sentinel-2-l2a' \
