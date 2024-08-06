@@ -7,7 +7,7 @@ docker-compose up -d
 docker-compose exec -T index datacube system init
 docker-compose exec -T index datacube system check
 echo "Adding Product..."
-docker-compose exec -T index wget https://eo4naturapublicbucket.s3.us-west-2.amazonaws.com/s2_l2a.odc-product.yaml
+docker-compose exec -T index wget https://eo4naturabucketpublic.s3.us-west-2.amazonaws.com/s2_l2a.odc-product.yml
 docker-compose exec -T index datacube product add s2_l2a.odc-product.yaml
 echo "Checking STAC API indexing..."
 docker-compose exec -T index stac-to-dc \
