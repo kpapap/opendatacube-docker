@@ -2,7 +2,7 @@
 services:
   # Start docker container for datacube-index
   index:
-    image: opendatacube/datacube-index:latest
+    image: opendatacube/datacube-index:local
     environment:
       - DB_HOSTNAME=database-1.cluster-cfgam6cksth1.us-west-2.rds.amazonaws.com
       - DB_USERNAME=postgres
@@ -17,7 +17,7 @@ services:
 
   # Start docker container for Explorer
   explorer:
-    image: opendatacube/explorer:latest
+    image: opendatacube/explorer:local
     environment:
       - DB_HOSTNAME=database-1.cluster-cfgam6cksth1.us-west-2.rds.amazonaws.com
       - DB_USERNAME=postgres
