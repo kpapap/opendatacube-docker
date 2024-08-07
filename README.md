@@ -16,7 +16,7 @@ ODC Explorer:
 
 ## First time install
 
-Launch an AWS (t2.large) 50GB instance.
+Launch an AWS (t2.medium) 50GB instance.
 
 Install docker, docker-compose, make, give your user permission to run docker without sudo.
 Pull docker images for ODC Index and ODC Explorer.
