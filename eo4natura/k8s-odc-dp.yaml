@@ -98,6 +98,46 @@ spec:
           args:
             - 'xcube serve -vvv --prefix xcubeserver/ --revprefix https://eo4natura.data-cube.gr/xcubeserver --address 0.0.0.0 --port 8080 -c /home/xcube/examples/serve/demo/config.yml'
           restartPolicy: UnlessStopped
+          volumeMounts:
+            - name: xcube-server-config
+              mountPath: /home/xcube/examples/serve/demo/config.yml
+      volumes:
+        - name: xcube-server-config
+          persistentVolumeClaim:
+            claimName: pvc-config
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-config
+spec:
+  accessModes:
+    - ReadOnlyMany
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pvc-config
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadOnlyMany
+  persistentVolumeReclaimPolicy: Retain
+  local:
+    path: /path/to/host/config
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - your-node-name # This should match the value of the name of the node.
+  storageClassName: local-storage
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
