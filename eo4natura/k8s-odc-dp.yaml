@@ -3,6 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: datacube-config
+  namespace: eo4natura
 data:
   DB_HOSTNAME: 'database-1.cluster-cfgam6cksth1.us-west-2.rds.amazonaws.com'
   DB_USERNAME: 'postgres'
@@ -16,6 +17,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: datacube-index
+  namespace: eo4natura
 spec:
   replicas: 1
   selector:
@@ -26,6 +28,7 @@ spec:
       labels:
         app: datacube-index
     spec:
+      restartPolicy: Always
       containers:
         - name: datacube-index
           image: opendatacube/datacube-index:local
@@ -39,12 +42,12 @@ spec:
             - secretRef:
                 name: datacube-secret
           command: ['tail', -f", '/dev/null']
-          restartPolicy: Always
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: datacube-explorer
+  namespace: eo4natura
 spec:
   replicas: 1
   selector:
@@ -55,6 +58,7 @@ spec:
       labels:
         app: datacube-explorer
     spec:
+      restartPolicy: Always
       containers:
         - name: datacube-explorer
           image: opendatacube/explorer:local
@@ -69,12 +73,12 @@ spec:
                 name: datacube-secret
           ports:
             - containerPort: 8080
-          restartPolicy: Always
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: xcube-server
+  namespace: eo4natura
 spec:
   replicas: 1
   selector:
@@ -85,6 +89,7 @@ spec:
       labels:
         app: xcube-server
     spec:
+      restartPolicy: Always
       containers:
         - name: xcube-server
           image: xcube:0.10.0
@@ -97,7 +102,6 @@ spec:
           command: ['/bin/bash', '-c']
           args:
             - 'xcube serve -vvv --prefix xcubeserver/ --revprefix https://eo4natura.data-cube.gr/xcubeserver --address 0.0.0.0 --port 8080 -c /home/xcube/examples/serve/demo/config.yml'
-          restartPolicy: UnlessStopped
           volumeMounts:
             - name: xcube-server-config
               mountPath: /home/xcube/examples/serve/demo/config.yml
@@ -110,20 +114,22 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: pvc-config
+  namespace: eo4natura
 spec:
   accessModes:
     - ReadOnlyMany
   resources:
     requests:
-      storage: 10Gi
+      storage: 1Gi
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: pvc-config
+  namespace: eo4natura
 spec:
   capacity:
-    storage: 10Gi
+    storage: 1Gi
   accessModes:
     - ReadOnlyMany
   persistentVolumeReclaimPolicy: Retain
@@ -136,13 +142,14 @@ spec:
             - key: kubernetes.io/hostname
               operator: In
               values:
-                - your-node-name # This should match the value of the name of the node.
+                - k3d-maclocalcluster-server-0 # This should match the value of the name of the node.
   storageClassName: local-storage
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: explorer-ingress
+  namespace: eo4natura
 spec:
   rules:
     - host: eo4natura.example.com
@@ -170,6 +177,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: explorer-service
+  namespace: eo4natura
 spec:
   selector:
     app: datacube-explorer
@@ -183,6 +191,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: xcube-server-service
+  namespace: eo4natura
 spec:
   selector:
     app: xcube-server
@@ -192,4 +201,4 @@ spec:
       targetPort: 8080
   type: ClusterIP
 # Add a secret to the k8s cluster for DB_PASSWORD
-# kubectl create secret generic datacube-secret --from-literal=DB_PASSWORD=opendatacubepassword
+# kubectl create secret generic datacube-secret -n eo4natura --from-literal=DB_PASSWORD=opendatacubepassword
