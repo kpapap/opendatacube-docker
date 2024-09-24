@@ -71,13 +71,41 @@ spec:
             - containerPort: 8080
           restartPolicy: Always
 ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xcube-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: xcube-server
+  template:
+    metadata:
+      labels:
+        app: xcube-server
+    spec:
+      containers:
+        - name: xcube-server
+          image: xcube:0.10.0
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 2Gi
+          ports:
+            - containerPort: 8080
+          command: ['/bin/bash', '-c']
+          args:
+            - 'xcube serve -vvv --prefix xcubeserver/ --revprefix https://eo4natura.data-cube.gr/xcubeserver --address 0.0.0.0 --port 8080 -c /home/xcube/examples/serve/demo/config.yml'
+          restartPolicy: UnlessStopped
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: explorer-ingress
 spec:
   rules:
-    - host: explorer.example.com
+    - host: eo4natura.example.com
       http:
         paths:
           - path: /
@@ -87,6 +115,16 @@ spec:
                 name: explorer-service
                 port:
                   number: 9000
+    - host: eo4natura.example.com
+      http:
+        paths:
+          - path: /xcubeserver/
+            pathType: Prefix
+            backend:
+              service:
+                name: xcube-server-service
+                port:
+                  number: 80
 ---
 apiVersion: v1
 kind: Service
@@ -98,6 +136,19 @@ spec:
   ports:
     - name: explorer
       port: 9000
+      targetPort: 8080
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: xcube-server-service
+spec:
+  selector:
+    app: xcube-server
+  ports:
+    - name: xcube
+      port: 80
       targetPort: 8080
   type: ClusterIP
 # Add a secret to the k8s cluster for DB_PASSWORD
