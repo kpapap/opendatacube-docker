@@ -31,7 +31,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: datacube-index
-          image: opendatacube/datacube-index:local
+          image: ghcr.io/kpapap/datacube-index:local
           resources:
             limits:
               cpu: 500m
@@ -41,7 +41,9 @@ spec:
                 name: datacube-config
             - secretRef:
                 name: datacube-secret
-          command: ['tail', -f", '/dev/null']
+          command: ['tail', '-f', '/dev/null']
+      imagePullSecrets:
+        - name: regcred
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -61,7 +63,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: datacube-explorer
-          image: opendatacube/explorer:local
+          image: ghcr.io/kpapap/explorer:local
           resources:
             limits:
               cpu: 500m
@@ -73,6 +75,8 @@ spec:
                 name: datacube-secret
           ports:
             - containerPort: 8080
+      imagePullSecrets:
+        - name: regcred
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -92,58 +96,57 @@ spec:
       restartPolicy: Always
       containers:
         - name: xcube-server
-          image: xcube:0.10.0
+          image: ghcr.io/kpapap/xcube:0.10.0
           resources:
             limits:
               cpu: 1000m
               memory: 2Gi
           ports:
             - containerPort: 8080
-          command: ['/bin/bash', '-c']
-          args:
-            - 'xcube serve -vvv --prefix xcubeserver/ --revprefix https://eo4natura.data-cube.gr/xcubeserver --address 0.0.0.0 --port 8080 -c /home/xcube/examples/serve/demo/config.yml'
-          volumeMounts:
-            - name: xcube-server-config
-              mountPath: /home/xcube/examples/serve/demo/config.yml
-      volumes:
-        - name: xcube-server-config
-          persistentVolumeClaim:
-            claimName: pvc-config
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: pvc-config
-  namespace: eo4natura
-spec:
-  accessModes:
-    - ReadOnlyMany
-  resources:
-    requests:
-      storage: 1Gi
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: pvc-config
-  namespace: eo4natura
-spec:
-  capacity:
-    storage: 1Gi
-  accessModes:
-    - ReadOnlyMany
-  persistentVolumeReclaimPolicy: Retain
-  local:
-    path: /path/to/host/config
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: kubernetes.io/hostname
-              operator: In
-              values:
-                - k3d-maclocalcluster-server-0 # This should match the value of the name of the node.
-  storageClassName: local-storage
+          # volumeMounts:
+          #   - name: xcube-server-config
+          #     mountPath: /home/xcube/examples/serve/demo/config.yml
+      imagePullSecrets:
+        - name: regcred
+      # volumes:
+      #   - name: xcube-server-config
+      #     persistentVolumeClaim:
+      #       claimName: pvc-config
+# ---
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: pvc-config
+#   namespace: eo4natura
+# spec:
+#   accessModes:
+#     - ReadOnlyMany
+#   resources:
+#     requests:
+#       storage: 1Gi
+# ---
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: pvc-config
+#   namespace: eo4natura
+# spec:
+#   capacity:
+#     storage: 1Gi
+#   accessModes:
+#     - ReadOnlyMany
+#   persistentVolumeReclaimPolicy: Retain
+# local:
+#   path: /path/to/host/config
+# nodeAffinity:
+#   required:
+#     nodeSelectorTerms:
+#       - matchExpressions:
+#           - key: kubernetes.io/hostname
+#             operator: In
+#             values:
+#               - k3d-maclocalcluster-server-0 # This should match the value of the name of the node.
+# storageClassName: local-storage
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
